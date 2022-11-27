@@ -1,36 +1,25 @@
-import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { getContacts } from 'redux/selectors';
 import { Label, Input, ContactForm, Button } from './Form.styled';
-import { nanoid } from 'nanoid';
 
-export const Form = props => {
-  const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+import { addContact } from 'redux/contactsSlice';
 
-  const handleInputChange = event => {
-    const { name, value } = event.currentTarget;
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'number':
-        setNumber(value);
-        break;
-
-      default:
-        return;
-    }
-  };
+export const Form = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts).items;
+  // console.log(contacts);
 
   const handleSubmit = event => {
     event.preventDefault();
-    props.onSubmitData({ id: nanoid(), name, number });
-    resetState();
-  };
+    const form = event.target;
+    contacts
+      .map(contact => contact.name.toLowerCase())
+      .includes(form.name.value.toLowerCase())
+      ? alert(`${form.name.value} is already in contacts`)
+      : dispatch(addContact(form.name.value, form.number.value));
 
-  const resetState = () => {
-    setName('');
-    setNumber('');
+    form.reset();
   };
 
   return (
@@ -44,8 +33,6 @@ export const Form = props => {
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
-          value={name}
-          onChange={handleInputChange}
         />
       </Label>
 
@@ -57,70 +44,9 @@ export const Form = props => {
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
-          value={number}
-          onChange={handleInputChange}
         />
       </Label>
       <Button type="submit">Add contact</Button>
     </ContactForm>
   );
-};
-// export class OldForm extends Component {
-//   state = {
-//     name: '',
-//     number: '',
-//   };
-
-//   handleInputChange = event => {
-//     const { name, value } = event.currentTarget;
-//     this.setState({ [name]: value });
-//   };
-
-//   handleSubmit = event => {
-//     event.preventDefault();
-//     this.props.onSubmitData({ id: nanoid(), ...this.state });
-//     this.resetState();
-//   };
-
-//   resetState = () => {
-//     this.setState({ name: '', number: '' });
-//   };
-
-//   render() {
-//     return (
-//       <ContactForm onSubmit={this.handleSubmit}>
-//         <Label>
-//           {' '}
-//           Name
-//           <Input
-//             type="text"
-//             name="name"
-//             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-//             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-//             required
-//             value={this.state.name}
-//             onChange={this.handleInputChange}
-//           />
-//         </Label>
-
-//         <Label>
-//           Number
-//           <Input
-//             type="tel"
-//             name="number"
-//             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-//             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-//             required
-//             value={this.state.number}
-//             onChange={this.handleInputChange}
-//           />
-//         </Label>
-//         <Button type="submit">Add contact</Button>
-//       </ContactForm>
-//     );
-//   }
-// }
-
-Form.propTypes = {
-  onSubmitData: PropTypes.func.isRequired,
 };
