@@ -6,19 +6,17 @@ import { Form } from './Form/Form';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
 
-// import { useLocalStorage } from '../hooks/useLocalStorage';
-
 export const App = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(getContacts).items;
 
   return (
     <Box>
       <Form />
       {contacts.length > 0 && (
-        <div>
+        <Box mt="3">
           <Filter />
           <ContactsList />
-        </div>
+        </Box>
       )}
     </Box>
   );

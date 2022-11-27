@@ -22,7 +22,7 @@ export const ContactsList = () => {
 
   return (
     <Box>
-      <h2>Contacts</h2>
+      <h4>Contacts:</h4>
       <List>
         {getVisibleContacts().map(contact => (
           <ContactItem contact={contact} key={contact.id} />
