@@ -1,25 +1,33 @@
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
-import { Label, Input, ContactForm, Button } from './Form.styled';
+import 'react-notifications/lib/notifications.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
 
-import { addContact } from 'redux/contactsSlice';
+import { Label, Input, ContactForm, Button } from './Form.styled';
 
 export const Form = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts).items;
-  // console.log(contacts);
+  const contacts = useSelector(selectContacts);
 
   const handleSubmit = event => {
     event.preventDefault();
     const form = event.target;
-    contacts
-      .map(contact => contact.name.toLowerCase())
-      .includes(form.name.value.toLowerCase())
-      ? alert(`${form.name.value} is already in contacts`)
-      : dispatch(addContact(form.name.value, form.number.value));
 
-    form.reset();
+    if (
+      contacts
+        .map(contact => contact.name.toLowerCase())
+        .includes(form.name.value.toLowerCase())
+    ) {
+      alert(`${form.name.value} is already in contacts`);
+    } else {
+      dispatch(
+        addContact({
+          name: form.elements.name.value,
+          phone: form.elements.number.value,
+        })
+      );
+      form.reset();
+    }
   };
 
   return (

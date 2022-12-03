@@ -1,30 +1,29 @@
 import { useDispatch } from 'react-redux';
-import { removeContact } from 'redux/contactsSlice';
+import { deleteContact } from 'redux/operations';
 import PropTypes from 'prop-types';
 import { Item, Button } from './ContactItem.styled';
 
-export const ContactItem = ({ contact: { name, number, id } }) => {
+export const ContactItem = ({ contact: { name, phone, id } }) => {
   const dispatch = useDispatch();
 
-  const handleRemove = () => dispatch(removeContact(id));
+  const handleDelete = () => dispatch(deleteContact(id));
 
   return (
     <Item>
       <p>
-        {name}: {number}
+        {name}: {phone}
       </p>
-      <Button type="button" onClick={handleRemove}>
+      <Button type="button" onClick={handleDelete}>
         Remove
       </Button>
     </Item>
   );
 };
 
-ContactItem.propTypes = {
-  contact: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    number: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
-  }),
-  // onDeleteContact: PropTypes.func.isRequired,
-};
+// ContactItem.propTypes = {
+//   contact: PropTypes.shape({
+//     name: PropTypes.string.isRequired,
+//     phone: PropTypes.string.isRequired,
+//     id: PropTypes.string.isRequired,
+//   }),
+// };
