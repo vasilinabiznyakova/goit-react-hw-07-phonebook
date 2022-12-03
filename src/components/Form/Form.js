@@ -1,4 +1,3 @@
-import 'react-notifications/lib/notifications.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectContacts } from 'redux/selectors';
 import { addContact } from 'redux/operations';
